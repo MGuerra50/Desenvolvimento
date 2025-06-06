@@ -1,0 +1,46 @@
+package com.desenvolvimento;
+
+import java_cup.runtime.*;
+
+terminal KW_GRAPH, KW_VERTEX, KW_EDGE, KW_PRINT, KW_ADJACENCY;
+terminal KW_DIRECTED, KW_UNDIRECTED;
+terminal SYM_ARROW_DIR, SYM_ARROW_UNDIR;
+terminal ID;
+
+non terminal program, graph_body, type_definition, command_list;
+non terminal command, vertex_declaration, edge_declaration, print_command;
+non terminal arrow;
+
+start with program;
+
+program ::=
+    KW_GRAPH graph_body;
+
+graph_body ::=
+    type_definition command_list;
+
+type_definition ::=
+    KW_DIRECTED
+    | KW_UNDIRECTED;
+
+command_list ::=
+    command_list command
+    | command;
+
+command ::=
+    vertex_declaration
+    | edge_declaration
+    | print_command;
+
+vertex_declaration ::=
+    KW_VERTEX ID;
+
+edge_declaration ::=
+    KW_EDGE ID:id1 arrow ID:id2;
+
+arrow ::=
+    SYM_ARROW_DIR
+    | SYM_ARROW_UNDIR;
+
+print_command ::=
+    KW_PRINT KW_ADJACENCY;

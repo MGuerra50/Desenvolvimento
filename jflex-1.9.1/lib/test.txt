@@ -1,0 +1,5 @@
+GRAPH: directed
+vertex A
+vertex B
+edge A -> B
+print adjacency

@@ -1,0 +1,16 @@
+1_
+cd C:\Desenvolvimento\jflex-1.9.1\lib
+
+2_
+java -Xmx128m -jar "C:\Desenvolvimento\jflex-1.9.1\lib\jflex-full-1.9.1.jar" lexical_analyzer.flex
+
+3_
+java -jar "C:\Desenvolvimento\java-cup\java-cup-11b.jar" -parser Parser -symbols sym -destdir . glc.cup
+
+4_
+javac -cp "C:\Desenvolvimento\java-cup\java-cup-11b-runtime.jar" Yylex.java sym.java Parser.java
+
+
+
+
+
