@@ -1,0 +1,5 @@
+GRAPH
+directed
+vartx A 
+vertex B
+edge A -> B

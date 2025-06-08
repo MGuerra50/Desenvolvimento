@@ -1,0 +1,71 @@
+package com.desenvolvimento;
+import java_cup.runtime.*;
+import com.desenvolvimento.Grafo;
+import com.desenvolvimento.GerenciadorErros;
+
+parser code {:
+    public Grafo meuGrafo = new Grafo();
+    private GerenciadorErros gerenciador;
+
+    public Parser(Yylex lexer, GerenciadorErros gerenciador) {
+        super(lexer); // Chama o construtor da classe pai
+        this.gerenciador = gerenciador;
+    }
+:};
+
+terminal KW_GRAPH, KW_VERTEX, KW_EDGE, KW_PRINT, KW_ADJACENCY;
+terminal KW_DIRECTED, KW_UNDIRECTED;
+terminal SYM_ARROW_DIR, SYM_ARROW_UNDIR;
+terminal String ID;
+
+non terminal program, graph_body, type_definition, command_list;
+non terminal command, vertex_declaration, edge_declaration, print_command;
+non terminal arrow;
+
+start with program;
+
+program ::=
+    KW_GRAPH graph_body;
+
+graph_body ::=
+    type_definition command_list;
+
+type_definition ::=
+    KW_DIRECTED:tipo      {: parser.meuGrafo.setTipo("directed"); :}
+    | KW_UNDIRECTED:tipo  {: parser.meuGrafo.setTipo("undirected"); :};
+
+command_list ::=
+    command_list command
+    | command;
+
+command ::=
+    vertex_declaration
+    | edge_declaration
+    | print_command
+    | error;
+
+vertex_declaration ::=
+    KW_VERTEX ID:nome {:
+        parser.meuGrafo.addVertice(nome);
+    :};
+
+edge_declaration ::=
+    KW_EDGE ID:v1 arrow ID:v2 {:
+        if (parser.meuGrafo.verticeExiste(v1) && parser.meuGrafo.verticeExiste(v2)) {
+            // Adiciona a verificação de aresta duplicada
+            if (!parser.meuGrafo.addAresta(v1, v2)) {
+                parser.gerenciador.addErro("Semântico", v1left, v1right, "Aresta duplicada entre '" + v1 + "' e '" + v2 + "'.");
+            }
+        } else {
+            parser.gerenciador.addErro("Semântico", v1left, v1right, "Tentativa de criar aresta com vértice não declarado.");
+        }
+    :};
+
+arrow ::=
+    SYM_ARROW_DIR
+    | SYM_ARROW_UNDIR;
+
+print_command ::=
+    KW_PRINT KW_ADJACENCY {:
+        parser.meuGrafo.imprimirMatrizAdjacencia("matriz_adjacencia.txt");
+    :};

@@ -3,7 +3,7 @@
 // source: lexical_analyzer.flex
 
 package com.desenvolvimento;
-
+import com.desenvolvimento.GerenciadorErros; 
 import java_cup.runtime.Symbol;
 
 
@@ -317,6 +317,13 @@ public class Yylex implements java_cup.runtime.Scanner {
   private boolean zzEOFDone;
 
   /* user code: */
+  private GerenciadorErros gerenciador;
+
+  public Yylex(java.io.Reader in, GerenciadorErros gerenciador) {
+        this(in);
+        this.gerenciador = gerenciador;
+    }
+
   private Symbol symbol(int type) {
     return new Symbol(type, yyline + 1, yycolumn + 1);
   }
@@ -752,7 +759,8 @@ public class Yylex implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { System.err.println("Erro Léxico na linha " + (yyline+1) + ", coluna " + (yycolumn+1) + ": Comando ou caractere desconhecido: '" + yytext() + "'");
+            { this.gerenciador.addErro("Léxico", yyline + 1, yycolumn + 1, "Caractere ou comando desconhecido: '" + yytext() + "'");
+                return new Symbol(sym.error, yyline + 1, yycolumn + 1);
             }
           // fall through
           case 13: break;

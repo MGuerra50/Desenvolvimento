@@ -1,5 +1,8 @@
-GRAPH: directed
+GRAPH
+directed
 vertex A
 vertex B
+vertex C
 edge A -> B
+edge B -> C
 print adjacency

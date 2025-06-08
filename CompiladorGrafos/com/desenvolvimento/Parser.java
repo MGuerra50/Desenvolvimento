@@ -6,6 +6,8 @@
 package com.desenvolvimento;
 
 import java_cup.runtime.*;
+import com.desenvolvimento.Grafo;
+import com.desenvolvimento.GerenciadorErros;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -31,11 +33,12 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\017\000\002\002\004\000\002\002\004\000\002\003" +
+    "\000\020\000\002\002\004\000\002\002\004\000\002\003" +
     "\004\000\002\004\003\000\002\004\003\000\002\005\004" +
     "\000\002\005\003\000\002\006\003\000\002\006\003\000" +
-    "\002\006\003\000\002\007\004\000\002\010\006\000\002" +
-    "\012\003\000\002\012\003\000\002\011\004" });
+    "\002\006\003\000\002\006\003\000\002\007\004\000\002" +
+    "\010\006\000\002\012\003\000\002\012\003\000\002\011" +
+    "\004" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -43,23 +46,26 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\030\000\004\004\004\001\002\000\006\011\010\012" +
+    "\000\031\000\004\004\004\001\002\000\006\011\010\012" +
     "\012\001\002\000\004\002\006\001\002\000\004\002\001" +
-    "\001\002\000\010\005\013\006\015\007\020\001\002\000" +
-    "\010\005\ufffe\006\ufffe\007\ufffe\001\002\000\004\002\000" +
-    "\001\002\000\010\005\ufffd\006\ufffd\007\ufffd\001\002\000" +
-    "\004\015\032\001\002\000\012\002\uffff\005\013\006\015" +
-    "\007\020\001\002\000\004\015\024\001\002\000\012\002" +
-    "\ufff8\005\ufff8\006\ufff8\007\ufff8\001\002\000\012\002\ufff9" +
-    "\005\ufff9\006\ufff9\007\ufff9\001\002\000\004\010\023\001" +
-    "\002\000\012\002\ufffa\005\ufffa\006\ufffa\007\ufffa\001\002" +
-    "\000\012\002\ufffb\005\ufffb\006\ufffb\007\ufffb\001\002\000" +
-    "\012\002\ufff3\005\ufff3\006\ufff3\007\ufff3\001\002\000\006" +
-    "\013\025\014\026\001\002\000\004\015\ufff5\001\002\000" +
-    "\004\015\ufff4\001\002\000\004\015\030\001\002\000\012" +
-    "\002\ufff6\005\ufff6\006\ufff6\007\ufff6\001\002\000\012\002" +
-    "\ufffc\005\ufffc\006\ufffc\007\ufffc\001\002\000\012\002\ufff7" +
-    "\005\ufff7\006\ufff7\007\ufff7\001\002" });
+    "\001\002\000\012\003\022\005\016\006\013\007\017\001" +
+    "\002\000\012\003\ufffe\005\ufffe\006\ufffe\007\ufffe\001\002" +
+    "\000\004\002\000\001\002\000\012\003\ufffd\005\ufffd\006" +
+    "\ufffd\007\ufffd\001\002\000\004\015\027\001\002\000\014" +
+    "\002\ufffb\003\ufffb\005\ufffb\006\ufffb\007\ufffb\001\002\000" +
+    "\014\002\ufff8\003\ufff8\005\ufff8\006\ufff8\007\ufff8\001\002" +
+    "\000\004\015\026\001\002\000\004\010\025\001\002\000" +
+    "\014\002\ufff9\003\ufff9\005\ufff9\006\ufff9\007\ufff9\001\002" +
+    "\000\014\002\uffff\003\022\005\016\006\013\007\017\001" +
+    "\002\000\014\002\ufff7\003\ufff7\005\ufff7\006\ufff7\007\ufff7" +
+    "\001\002\000\014\002\ufffa\003\ufffa\005\ufffa\006\ufffa\007" +
+    "\ufffa\001\002\000\014\002\ufffc\003\ufffc\005\ufffc\006\ufffc" +
+    "\007\ufffc\001\002\000\014\002\ufff2\003\ufff2\005\ufff2\006" +
+    "\ufff2\007\ufff2\001\002\000\014\002\ufff6\003\ufff6\005\ufff6" +
+    "\006\ufff6\007\ufff6\001\002\000\006\013\030\014\031\001" +
+    "\002\000\004\015\ufff4\001\002\000\004\015\ufff3\001\002" +
+    "\000\004\015\033\001\002\000\014\002\ufff5\003\ufff5\005" +
+    "\ufff5\006\ufff5\007\ufff5\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -67,16 +73,16 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\030\000\004\002\004\001\001\000\006\003\010\004" +
+    "\000\031\000\004\002\004\001\001\000\006\003\010\004" +
     "\006\001\001\000\002\001\001\000\002\001\001\000\014" +
-    "\005\013\006\021\007\020\010\016\011\015\001\001\000" +
+    "\005\020\006\013\007\022\010\017\011\014\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\012\006\030\007\020\010\016\011\015\001" +
-    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\004\012\026\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001" });
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\012\006\023" +
+    "\007\022\010\017\011\014\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\004\012\031\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -112,6 +118,16 @@ public class Parser extends java_cup.runtime.lr_parser {
 
   /** <code>error</code> Symbol index. */
   public int error_sym() {return 1;}
+
+
+
+    public Grafo meuGrafo = new Grafo();
+    private GerenciadorErros gerenciador;
+
+    public Parser(Yylex lexer, GerenciadorErros gerenciador) {
+        super(lexer); // Chama o construtor da classe pai
+        this.gerenciador = gerenciador;
+    }
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
@@ -174,7 +190,10 @@ class CUP$Parser$actions {
           case 3: // type_definition ::= KW_DIRECTED 
             {
               Object RESULT =null;
-
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Object tipo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 parser.meuGrafo.setTipo("directed"); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("type_definition",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -183,7 +202,10 @@ class CUP$Parser$actions {
           case 4: // type_definition ::= KW_UNDIRECTED 
             {
               Object RESULT =null;
-
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Object tipo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 parser.meuGrafo.setTipo("undirected"); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("type_definition",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -234,31 +256,54 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 10: // vertex_declaration ::= KW_VERTEX ID 
+          case 10: // command ::= error 
             {
               Object RESULT =null;
 
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("command",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 11: // vertex_declaration ::= KW_VERTEX ID 
+            {
+              Object RESULT =null;
+		int nomeleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int nomeright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String nome = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		
+        parser.meuGrafo.addVertice(nome);
+    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("vertex_declaration",5, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 11: // edge_declaration ::= KW_EDGE ID arrow ID 
+          case 12: // edge_declaration ::= KW_EDGE ID arrow ID 
             {
               Object RESULT =null;
-		int id1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
-		int id1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
-		Object id1 = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		int id2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int id2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		Object id2 = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-
+		int v1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
+		int v1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
+		String v1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int v2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int v2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String v2 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		
+        if (parser.meuGrafo.verticeExiste(v1) && parser.meuGrafo.verticeExiste(v2)) {
+            // Adiciona a verificação de aresta duplicada
+            if (!parser.meuGrafo.addAresta(v1, v2)) {
+                parser.gerenciador.addErro("Semântico", v1left, v1right, "Aresta duplicada entre '" + v1 + "' e '" + v2 + "'.");
+            }
+        } else {
+            parser.gerenciador.addErro("Semântico", v1left, v1right, "Tentativa de criar aresta com vértice não declarado.");
+        }
+    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("edge_declaration",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // arrow ::= SYM_ARROW_DIR 
+          case 13: // arrow ::= SYM_ARROW_DIR 
             {
               Object RESULT =null;
 
@@ -267,7 +312,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 13: // arrow ::= SYM_ARROW_UNDIR 
+          case 14: // arrow ::= SYM_ARROW_UNDIR 
             {
               Object RESULT =null;
 
@@ -276,10 +321,12 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 14: // print_command ::= KW_PRINT KW_ADJACENCY 
+          case 15: // print_command ::= KW_PRINT KW_ADJACENCY 
             {
               Object RESULT =null;
-
+		
+        parser.meuGrafo.imprimirMatrizAdjacencia("matriz_adjacencia.txt");
+    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("print_command",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
