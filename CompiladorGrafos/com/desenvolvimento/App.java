@@ -1,8 +1,10 @@
 package com.desenvolvimento;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 public class App {
+
     public static void main(String[] args) {
         if (args.length == 0) {
             System.err.println("Uso: java com.desenvolvimento.App <caminho_para_arquivo_fonte>");
@@ -10,32 +12,31 @@ public class App {
         }
 
         String arquivoFonte = args[0];
-        System.out.println("Compilando o arquivo: " + arquivoFonte);
+        GerenciadorErros gerenciador = new GerenciadorErros();
 
         try {
-            // 1. Cria o gerenciador de erros
-            GerenciadorErros gerenciador = new GerenciadorErros();
+            System.out.println("Compilando o arquivo: " + arquivoFonte);
 
-            // 2. Cria o lexer, passando o leitor e o gerenciador
             FileReader leitorArquivo = new FileReader(arquivoFonte);
             Yylex lexer = new Yylex(leitorArquivo, gerenciador);
-
-            // 3. Cria o parser, passando o lexer e o gerenciador
             Parser parser = new Parser(lexer, gerenciador);
-
-            // 4. Inicia a análise
+            
             parser.parse();
 
-            // 5. Salva o log de erros, se houver algum
-            gerenciador.salvarLog("errors.log");
-
-            if (!gerenciador.temErros()) {
-                System.out.println("Compilação concluída com sucesso.");
-            }
+        } catch (FileNotFoundException e) {
+            String msg = "Arquivo de entrada não encontrado: '" + arquivoFonte + "'";
+            gerenciador.addErro("Fatal", 0, 0, msg);
 
         } catch (Exception e) {
-            System.err.println("Ocorreu um erro fatal durante a compilação:");
+            String msg = "Ocorreu um erro fatal durante a compilação. Causa: " + e.getMessage();
+            gerenciador.addErro("Fatal", 0, 0, msg);
             e.printStackTrace();
+        } finally {
+            if (gerenciador.temErros()) {
+                gerenciador.salvarLog("errors.log");
+            } else {
+                System.out.println("Compilação concluída com sucesso.");
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ public class GerenciadorErros {
 
     public void salvarLog(String caminhoArquivo) {
         if (!temErros()) {
-            return; // Não cria o arquivo se não houver erros
+            return;
         }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(caminhoArquivo))) {
