@@ -320,9 +320,9 @@ public class Yylex implements java_cup.runtime.Scanner {
   private GerenciadorErros gerenciador;
 
   public Yylex(java.io.Reader in, GerenciadorErros gerenciador) {
-        this(in);
-        this.gerenciador = gerenciador;
-    }
+    this(in);
+    this.gerenciador = gerenciador;
+  }
 
   private Symbol symbol(int type) {
     return new Symbol(type, yyline + 1, yycolumn + 1);
@@ -753,14 +753,14 @@ public class Yylex implements java_cup.runtime.Scanner {
         zzAtEOF = true;
             zzDoEOF();
               {
-                return new Symbol (sym.EOF, yytext());
+                return new Symbol(sym.EOF);
               }
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
             { this.gerenciador.addErro("Léxico", yyline + 1, yycolumn + 1, "Caractere ou comando desconhecido: '" + yytext() + "'");
-                return new Symbol(sym.error, yyline + 1, yycolumn + 1);
+    return symbol(sym.error);
             }
           // fall through
           case 13: break;
@@ -770,52 +770,52 @@ public class Yylex implements java_cup.runtime.Scanner {
           // fall through
           case 14: break;
           case 3:
-            { return new Symbol (sym.ID, yytext());
+            { return symbol(sym.ID, yytext());
             }
           // fall through
           case 15: break;
           case 4:
-            { return new Symbol (sym.SYM_ARROW_UNDIR, yytext());
+            { return symbol(sym.SYM_ARROW_UNDIR);
             }
           // fall through
           case 16: break;
           case 5:
-            { return new Symbol (sym.SYM_ARROW_DIR, yytext());
+            { return symbol(sym.SYM_ARROW_DIR);
             }
           // fall through
           case 17: break;
           case 6:
-            { return new Symbol (sym.KW_EDGE, yytext());
+            { return symbol(sym.KW_EDGE);
             }
           // fall through
           case 18: break;
           case 7:
-            { return new Symbol (sym.KW_GRAPH, yytext());
+            { return symbol(sym.KW_GRAPH);
             }
           // fall through
           case 19: break;
           case 8:
-            { return new Symbol (sym.KW_PRINT, yytext());
+            { return symbol(sym.KW_PRINT);
             }
           // fall through
           case 20: break;
           case 9:
-            { return new Symbol (sym.KW_VERTEX, yytext());
+            { return symbol(sym.KW_VERTEX);
             }
           // fall through
           case 21: break;
           case 10:
-            { return new Symbol (sym.KW_DIRECTED, yytext());
+            { return symbol(sym.KW_DIRECTED);
             }
           // fall through
           case 22: break;
           case 11:
-            { return new Symbol (sym.KW_ADJACENCY, yytext());
+            { return symbol(sym.KW_ADJACENCY);
             }
           // fall through
           case 23: break;
           case 12:
-            { return new Symbol (sym.KW_UNDIRECTED, yytext());
+            { return symbol(sym.KW_UNDIRECTED);
             }
           // fall through
           case 24: break;

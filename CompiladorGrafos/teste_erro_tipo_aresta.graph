@@ -1,0 +1,5 @@
+GRAPH
+undirected
+vertex X
+vertex Y
+edge X -> Y

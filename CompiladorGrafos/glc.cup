@@ -8,8 +8,18 @@ parser code {:
     private GerenciadorErros gerenciador;
 
     public Parser(Yylex lexer, GerenciadorErros gerenciador) {
-        super(lexer); // Chama o construtor da classe pai
+        super(lexer);
         this.gerenciador = gerenciador;
+    }
+
+    public void syntax_error(Symbol cur_token) {
+        String mensagem = "Token inesperado '" + cur_token.value + "'. Era esperado um comando como 'vertex', 'edge' ou 'print'.";
+        gerenciador.addErro("Sintático", cur_token.left, cur_token.right, mensagem);
+    }
+
+    public void unrecovered_syntax_error(Symbol cur_token) throws java.lang.Exception {
+        String mensagem = "Erro de sintaxe fatal. Não foi possível continuar a análise.";
+        gerenciador.addErro("Fatal", cur_token.left, cur_token.right, mensagem);
     }
 :};
 
@@ -20,7 +30,7 @@ terminal String ID;
 
 non terminal program, graph_body, type_definition, command_list;
 non terminal command, vertex_declaration, edge_declaration, print_command;
-non terminal arrow;
+non terminal String arrow;
 
 start with program;
 
@@ -50,9 +60,12 @@ vertex_declaration ::=
     :};
 
 edge_declaration ::=
-    KW_EDGE ID:v1 arrow ID:v2 {:
-        if (parser.meuGrafo.verticeExiste(v1) && parser.meuGrafo.verticeExiste(v2)) {
-            // Adiciona a verificação de aresta duplicada
+    KW_EDGE ID:v1 arrow:tipoAresta ID:v2 {:
+        if (parser.meuGrafo.getTipo() == null) {
+             parser.gerenciador.addErro("Semântico", v1left, v1right, "Tipo do grafo não foi definido antes de criar arestas.");
+        } else if (!parser.meuGrafo.getTipo().equals(tipoAresta)) {
+            parser.gerenciador.addErro("Semântico", v1left, v1right, "Tipo de aresta incompatível. O grafo é '" + parser.meuGrafo.getTipo() + "'.");
+        } else if (parser.meuGrafo.verticeExiste(v1) && parser.meuGrafo.verticeExiste(v2)) {
             if (!parser.meuGrafo.addAresta(v1, v2)) {
                 parser.gerenciador.addErro("Semântico", v1left, v1right, "Aresta duplicada entre '" + v1 + "' e '" + v2 + "'.");
             }
@@ -62,8 +75,8 @@ edge_declaration ::=
     :};
 
 arrow ::=
-    SYM_ARROW_DIR
-    | SYM_ARROW_UNDIR;
+    SYM_ARROW_DIR   {: RESULT = "directed"; :}
+    | SYM_ARROW_UNDIR {: RESULT = "undirected"; :};
 
 print_command ::=
     KW_PRINT KW_ADJACENCY {:

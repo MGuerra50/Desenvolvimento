@@ -125,8 +125,18 @@ public class Parser extends java_cup.runtime.lr_parser {
     private GerenciadorErros gerenciador;
 
     public Parser(Yylex lexer, GerenciadorErros gerenciador) {
-        super(lexer); // Chama o construtor da classe pai
+        super(lexer);
         this.gerenciador = gerenciador;
+    }
+
+    public void syntax_error(Symbol cur_token) {
+        String mensagem = "Token inesperado '" + cur_token.value + "'. Era esperado um comando como 'vertex', 'edge' ou 'print'.";
+        gerenciador.addErro("Sintático", cur_token.left, cur_token.right, mensagem);
+    }
+
+    public void unrecovered_syntax_error(Symbol cur_token) throws java.lang.Exception {
+        String mensagem = "Erro de sintaxe fatal. Não foi possível continuar a análise.";
+        gerenciador.addErro("Fatal", cur_token.left, cur_token.right, mensagem);
     }
 
 
@@ -285,12 +295,18 @@ class CUP$Parser$actions {
 		int v1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int v1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		String v1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int tipoArestaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int tipoArestaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		String tipoAresta = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int v2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int v2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String v2 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
-        if (parser.meuGrafo.verticeExiste(v1) && parser.meuGrafo.verticeExiste(v2)) {
-            // Adiciona a verificação de aresta duplicada
+        if (parser.meuGrafo.getTipo() == null) {
+             parser.gerenciador.addErro("Semântico", v1left, v1right, "Tipo do grafo não foi definido antes de criar arestas.");
+        } else if (!parser.meuGrafo.getTipo().equals(tipoAresta)) {
+            parser.gerenciador.addErro("Semântico", v1left, v1right, "Tipo de aresta incompatível. O grafo é '" + parser.meuGrafo.getTipo() + "'.");
+        } else if (parser.meuGrafo.verticeExiste(v1) && parser.meuGrafo.verticeExiste(v2)) {
             if (!parser.meuGrafo.addAresta(v1, v2)) {
                 parser.gerenciador.addErro("Semântico", v1left, v1right, "Aresta duplicada entre '" + v1 + "' e '" + v2 + "'.");
             }
@@ -305,8 +321,8 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 13: // arrow ::= SYM_ARROW_DIR 
             {
-              Object RESULT =null;
-
+              String RESULT =null;
+		 RESULT = "directed"; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("arrow",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -314,8 +330,8 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 14: // arrow ::= SYM_ARROW_UNDIR 
             {
-              Object RESULT =null;
-
+              String RESULT =null;
+		 RESULT = "undirected"; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("arrow",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
